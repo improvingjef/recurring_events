@@ -4,7 +4,8 @@
 # RecurringEvents
 
 *RecurringEvents* is an Elixir library providing recurring events support
-(duh!).
+(duh!). I forked it from pbogut to experiment a bit. If I come up with anything good, I'll probably submit a PR, so I would
+start with the [original](https://github.com/pbogut/recurring_events).
 
 ## Documentation
 
