@@ -1,4 +1,4 @@
-defmodule RecurringEvents.Mixfile do
+defmodule Recur.Mixfile do
   use Mix.Project
 
   def project do
@@ -10,7 +10,7 @@ defmodule RecurringEvents.Mixfile do
      package: package(),
      description: description(),
      docs: [
-       main: RecurringEvents,
+       main: Recur,
        source_url: "https://github.com/pbogut/recurring_events"
      ],
      deps: deps()]

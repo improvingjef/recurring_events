@@ -1,2 +1,2 @@
 ExUnit.configure(exclude: [pending: true])
-ExUnit.start()
+ExUnit.start(timeout: 1000)
