@@ -3,22 +3,21 @@
 
 # Recur
 
-*Recur* is an Elixir library providing recurring events support
-(duh!). I forked it from pbogut to experiment a bit. If I come up with anything good, I'll probably submit a PR, so I would
-start with the [original](https://github.com/pbogut/recurring_events).
+*Recur* is an Elixir library providing recurring events support. After forking from [recurring_events by pbogut] (https://github.com/pbogut/recurring_events), I began to see a simple approach, so I started from scratch on the implementation,
+but I borrowed as many test cases as possible.
 
 ## Documentation
 
-API documentation is available at [https://hexdocs.pm/recurring_events](https://hexdocs.pm/recurring_events)
+API documentation is not available quite yet at [https://hexdocs.pm/recur](https://hexdocs.pm/recur)
 
 ## Installation
 
-The package can be installed as:
+The package can not yet be installed as:
 
-  Add `recurring_events` to your list of dependencies in `mix.exs`:
+  Add `recur` to your list of dependencies in `mix.exs`:
 
     ```elixir
     def deps do
-      [{:recurring_events, "~> 0.1.0"}]
+      [{:recur, "~> 0.0.1"}]
     end
     ```
