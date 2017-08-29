@@ -2,7 +2,7 @@ defmodule Recur do
   @moduledoc """
   """
   use Recur.Guards
-  alias Recur.Filter
+  alias Recur.{Filter, Dates}
 
   @doc """
   Returns daily stream of dates with respect to `:interval`, `:count` and

@@ -833,6 +833,11 @@ defmodule Recur.IcalRruleTest do
     DTSTART;TZID=US-Eastern:19970805T090000
     RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=SU
     ==> (1997 EDT)August 5,17,19,31
+
+    TODO: this is currently failing, because I am just diffing the two dates
+    rather than basing it off of week number. But using the week number causes
+    issues when the year starts on the odd week boundary. Maybe the week_no should
+    be the last_week_no of the previous year
   """
   test "An example where the days generated makes a difference because of WKST" do
     rules = %{start_date: ~D[1997-08-05], frequency: :weekly, interval: 2, count: 4,

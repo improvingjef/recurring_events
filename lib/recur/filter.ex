@@ -1,5 +1,6 @@
 defmodule Recur.Filter do
   use Recur.Guards
+  alias Recur.Dates
 
   def filter(date, %{frequency: :yearly} = rules)
     when is_map(rules) do
