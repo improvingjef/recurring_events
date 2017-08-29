@@ -18,6 +18,6 @@ The package can not yet be installed as:
 
     ```elixir
     def deps do
-      [{:recur, "~> 0.0.1"}]
+      [{:recur, "~> 0.1.0"}]
     end
     ```
