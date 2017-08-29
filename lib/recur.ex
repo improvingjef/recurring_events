@@ -1,6 +1,5 @@
 defmodule Recur do
   @moduledoc """
-  Handles `:daily` frequency rule
   """
   use Recur.Guards
   alias Recur.Filter
@@ -27,12 +26,13 @@ defmodule Recur do
     rules = %{rules | start_date: Dates.details(start_date, rules[:week_start])}
     start_date
     |> Stream.iterate(&Date.add(&1, 1))
-    |> Stream.filter(&interval(&1, rules))
+    |> Stream.filter(&Recur.interval(&1, rules))
     |> Stream.filter(&Filter.filter(&1, rules))
     |> terminate(rules)
   end
 
-  def unfold(_) do
+  def unfold(%{frequency: freq}) do
+    IO.inspect(freq)
     raise ArgumentError, message: "Recur rules must specify a valid frequency parameter."
   end
 
@@ -70,8 +70,17 @@ defmodule Recur do
     # g1 = :calendar.date_to_gregorian_days(date)
     # g2 = :calendar.date_to_gregorian_days(start_date)
     # div(g1 - g2 + 1, 7)
+
+    from = Date.add(start_date, - Dates.day_of_week(start_date, week_start) + 1)
+    to = Date.add(date, - Dates.day_of_week(date, week_start) + 1)
+    # [start_date, date, from, to]
+    # |> Enum.map(&(Date.to_erl(&1)))
+    # |> Enum.map(&{&1, :calendar.date_to_gregorian_days(&1)})
+    # |> Enum.concat([{Dates.day_of_week(start_date, week_start), Dates.day_of_week(date, week_start)}])
+    # |> IO.inspect()
+
     :daily
-    |> diff(start_date, date, week_start)
+    |> diff(from, to, week_start)
     |> div(7)
   end
 

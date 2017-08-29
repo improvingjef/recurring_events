@@ -135,8 +135,9 @@ defmodule Recur.Filter do
       |> Enum.filter(fn rule -> Enum.any?(rules_to_exclude, & &1 == elem(rule,0)) == false end)
       |> Enum.map(&(by(elem(&1,0), detail, elem(&1,1))))
 
-
-    Enum.empty?(matches) || Enum.all?(matches, &(&1))
+      Date.compare(rules.start_date, date) == :eq
+      || Enum.empty?(matches)
+      || Enum.all?(matches, &(&1))
   end
 
   defp which(day_of, value) do

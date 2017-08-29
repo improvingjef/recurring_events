@@ -681,6 +681,23 @@ defmodule Recur.IcalRruleTest do
   """
 
   test "The first Saturday that follows the first Sunday of the month, forever" do
+    expected = date_expand([
+      {1997,  9, 13},
+      {1997, 10, 11},
+      {1997, 11,  8},
+      {1997, 12, 13},
+      {1998,  1, 10},
+      {1998,  2,  7},
+      {1998,  3,  7},
+      {1998,  4, 11},
+      {1998,  5,  9},
+      {1998,  6, 13},
+      ])
+
+      results = RR.unfold(%{start_date: ~D[1997-09-13], frequency: :monthly, by_day: :saturday, by_month_day: (7..13 |> Enum.to_list())})
+      |> Enum.take(Enum.count(expected))
+
+      assert expected == results
   end
 
   @doc """
@@ -698,6 +715,15 @@ defmodule Recur.IcalRruleTest do
   """
 
   test "Every four years, the first Tuesday after a Monday in November, forever (U.S. Presidential Election day)" do
+    expected = date_expand([
+      {1996, 11, 5},
+      {2000, 11, 7},
+      {2004, 11, 2},
+      ])
+      results =
+        RR.unfold(%{start_date: ~D[1996-11-05], frequency: :yearly, interval: 4, by_month: 11, by_day: :tuesday, by_month_day: [2,3,4,5,6,7,8]})
+        |> Enum.take(3)
+      assert expected == results
   end
 
   @doc """
@@ -711,6 +737,7 @@ defmodule Recur.IcalRruleTest do
         (1997 9:00 AM EST)November 6
   """
 
+  @tag :pending
   test "The 3rd instance into the month of one of Tuesday, Wednesday or Thursday, for the next 3 months" do
   end
 
@@ -725,8 +752,17 @@ defmodule Recur.IcalRruleTest do
         (1998 9:00 AM EST)January 29;February 26;March 30
     ...
   """
-
+  @tag :pending
   test "The 2nd to last weekday of the month" do
+    expect = date_expand([
+      {1997,  9, 29},
+      {1997, 10, 30},
+      {1997, 11, 27},
+      {1997, 12, 30},
+      {1997,  1, 29},
+      {1997,  2, 26},
+      {1997,  3, 30},
+      ])
   end
 
   @doc """
@@ -737,7 +773,7 @@ defmodule Recur.IcalRruleTest do
 
     ==> (September 2, 1997 EDT)09:00,12:00,15:00
   """
-
+  @tag :pending
   test "Every 3 hours from 9:00 AM to 5:00 PM on a specific day" do
   end
 
@@ -749,7 +785,7 @@ defmodule Recur.IcalRruleTest do
 
     ==> (September 2, 1997 EDT)09:00,09:15,09:30,09:45,10:00,10:15
   """
-
+  @tag :pending
   test "Every 15 minutes for 6 occurrences" do
   end
 
@@ -761,7 +797,7 @@ defmodule Recur.IcalRruleTest do
 
     ==> (September 2, 1997 EDT)09:00,10:30;12:00;13:30
   """
-
+  @tag :pending
   test "Every hour and a half for 4 occurrences" do
   end
 
@@ -779,7 +815,7 @@ defmodule Recur.IcalRruleTest do
                               ...16:00,16:20,16:40
     ...
   """
-
+  @tag :pending
   test "Every 20 minutes from 9:00 AM to 4:40 PM every day" do
   end
 
@@ -798,7 +834,6 @@ defmodule Recur.IcalRruleTest do
     RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=SU
     ==> (1997 EDT)August 5,17,19,31
   """
-  @tag :pending
   test "An example where the days generated makes a difference because of WKST" do
     rules = %{start_date: ~D[1997-08-05], frequency: :weekly, interval: 2, count: 4,
               by_day: [:tuesday, :sunday], week_start: :monday}
