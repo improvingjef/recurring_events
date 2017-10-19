@@ -2,6 +2,59 @@ defmodule Recur.Filter do
   use Recur.Guards
   alias Recur.Dates
 
+  @moduledoc """
+
+  If multiple BYxxx rule parts are specified, then after evaluating
+  the specified FREQ and INTERVAL rule parts, the BYxxx rule parts
+  are applied to the current set of evaluated occurrences in the
+  following order: BYMONTH, BYWEEKNO, BYYEARDAY, BYMONTHDAY, BYDAY,
+  BYHOUR, BYMINUTE, BYSECOND and BYSETPOS; then COUNT and UNTIL are
+  evaluated.
+
+  The table below summarizes the dependency of BYxxx rule part
+  expand or limit behavior on the FREQ rule part value.
+
+  The term "N/A" means that the corresponding BYxxx rule part MUST
+  NOT be used with the corresponding FREQ value.
+
+  BYDAY has some special behavior depending on the FREQ value and
+  this is described in separate notes below the table.
+
+  +----------+--------+--------+-------       +-------+------+-------+------+
+  |          |SECONDLY|MINUTELY|HOURLY        |DAILY  |WEEKLY|MONTHLY|YEARLY|
+  +----------+--------+--------+-------       +-------+------+-------+------+
+  |BYMONTH   |Limit   |Limit   |Limit         |Limit  |Limit |Limit  |Expand|
+  +----------+--------+--------+-------       +-------+------+-------+------+
+  |BYWEEKNO  |N/A     |N/A     |N/A           |N/A    |N/A   |N/A    |Expand|
+  +----------+--------+--------+-------       +-------+------+-------+------+
+  |BYYEARDAY |Limit   |Limit   |Limit         |N/A    |N/A   |N/A    |Expand|
+  +----------+--------+--------+-------       +-------+------+-------+------+
+  |BYMONTHDAY|Limit   |Limit   |Limit         |Limit  |N/A   |Expand |Expand|
+  +----------+--------+--------+-------       +-------+------+-------+------+
+  |BYDAY     |Limit   |Limit   |Limit         |Limit  |Expand|Note 1 |Note 2|
+  +----------+--------+--------+-------       +-------+------+-------+------+
+
+  
+  |BYHOUR    |Limit   |Limit   |Limit  |Expand |Expand|Expand |Expand|
+  +----------+--------+--------+-------+-------+------+-------+------+
+  |BYMINUTE  |Limit   |Limit   |Expand |Expand |Expand|Expand |Expand|
+  +----------+--------+--------+-------+-------+------+-------+------+
+  |BYSECOND  |Limit   |Expand  |Expand |Expand |Expand|Expand |Expand|
+  +----------+--------+--------+-------+-------+------+-------+------+
+  |BYSETPOS  |Limit   |Limit   |Limit  |Limit  |Limit |Limit  |Limit |
+  +----------+--------+--------+-------+-------+------+-------+------+
+
+  Note 1:
+    Limit if BYMONTHDAY is present; otherwise, special expand
+    for MONTHLY.
+
+  Note 2:
+    Limit if BYYEARDAY or BYMONTHDAY is present; otherwise,
+    special expand for WEEKLY if BYWEEKNO present; otherwise,
+    special expand for MONTHLY if BYMONTH present; otherwise,
+    special expand for YEARLY.
+  """
+
   def filter(date, %{frequency: :yearly} = rules)
     when is_map(rules) do
 
