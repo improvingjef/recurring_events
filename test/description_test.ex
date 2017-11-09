@@ -51,9 +51,6 @@ defmodule Recur.IcalRruleTest do
     assert "Every year on the 3rd, 4th, and 11th days in June, July, and August" == Description.describe(%{frequency: :yearly, by_month: [6,7,8], by_month_day: [3,4,11]})
   end
 
-
-
-
   test "get month by number" do
     assert "January" == Description.by(:by_month, 1)
     assert "February" == Description.by(:by_month, 2)

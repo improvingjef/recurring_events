@@ -39,7 +39,6 @@ defmodule Recur.Description do
     |> Enum.filter(& not is_nil(&1))
     |> Enum.join(" ")
     |> String.trim()
-    |> IO.inspect()
   end
 
   def by(message, selector, params) do

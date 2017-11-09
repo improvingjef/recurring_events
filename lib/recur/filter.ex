@@ -19,6 +19,9 @@ defmodule Recur.Filter do
 
   BYDAY has some special behavior depending on the FREQ value and
   this is described in separate notes below the table.
+  Recur supports
+  :daily, :weekly, :monthly, and :yearly frequencies,
+  and :by_month, :by_week_no, :by_year_day, :by_month_day, :by_day filters
 
   +----------+--------+--------+-------       +-------+------+-------+------+
   |          |SECONDLY|MINUTELY|HOURLY        |DAILY  |WEEKLY|MONTHLY|YEARLY|
@@ -34,7 +37,7 @@ defmodule Recur.Filter do
   |BYDAY     |Limit   |Limit   |Limit         |Limit  |Expand|Note 1 |Note 2|
   +----------+--------+--------+-------       +-------+------+-------+------+
 
-  
+
   |BYHOUR    |Limit   |Limit   |Limit  |Expand |Expand|Expand |Expand|
   +----------+--------+--------+-------+-------+------+-------+------+
   |BYMINUTE  |Limit   |Limit   |Expand |Expand |Expand|Expand |Expand|
@@ -96,7 +99,6 @@ defmodule Recur.Filter do
 
   def by(:by_month_day, date, value)
     when not is_list(value) and not is_integer(value) do
-      IO.inspect({date, value})
       raise ArgumentError, message: "by_month_day expects a number; #{value}"
   end
 
@@ -119,10 +121,7 @@ defmodule Recur.Filter do
   end
 
   def by(:by_month, date, value)
-    when is_integer(value) do
-
-    date.month == value
-  end
+    when is_integer(value), do: date.month == value
 
   def by(by_filter, date, value)
     when is_atom(value) and by_filter in [:by_day, :by_day_yearly, :by_month_day],
@@ -143,22 +142,14 @@ defmodule Recur.Filter do
   end
 
   def by(:by_week_no, date, value)
-    when is_integer(value)
-  do
-    which(date.which_day_of_week, value)
-  end
+    when is_integer(value), do: which(date.which_day_of_week, value)
 
   def by(by_filter, date, value)
-    when by_filter in [:by_month_day, :by_year_day, :by_week_no] and is_integer(value) do
-
-    which(date[by_filter], value)
-  end
+    when by_filter in [:by_month_day, :by_year_day, :by_week_no] and is_integer(value),
+    do: which(date[by_filter], value)
 
   def by(:by_year_day, date, value)
-    when is_integer(value) do
-
-    which(date.day_of_year, value)
-  end
+    when is_integer(value), do: which(date.day_of_year, value)
 
   defp replace_key(map, key, replacement_key) do
     if Map.has_key?(map, key) do

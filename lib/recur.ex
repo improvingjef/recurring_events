@@ -8,13 +8,34 @@ defmodule Recur do
   Returns daily stream of dates with respect to `:interval`, `:count` and
   `:until` rules. Time in date provided as `:until` is ignored.
 
-  # Example
+  Example recurrence rule:
+  rules = %{
+    start_date: ~D[2017-01-01],
+    frequency: :yearly,         # or :monthly, :weekly, :daily
+    interval: 2,                # e.g. every other year
+    #-------------------------------------------------------------
+    # count and until are mutually exclusive
+    #-------------------------------------------------------------
+    count: 10,                  # up to 10 occurrences
+    # OR
+    until: ~D[2021-01-01],      # all recurrences before or including the provided date
+    #-------------------------------------------------------------
+    # all :by_* filters accept either a single value or an array
+    #-------------------------------------------------------------
+    by_month: [1],
+    by_week_no: [2],
+    :by_year_day: [11],
+    :by_month_day: [11],
+    :by_day: [{:friday,1}]      # first friday of the month
+  }
+
+  which would translate to
+  The first friday of the month if it is the 7th
 
       iex> Recur.unfold(%{start_date: ~N[2017-01-22 10:11:11],
       ...> frequency: :daily, until: ~N[2017-01-23 05:00:00]})
       ...> |> Enum.take(2)
       [~N[2017-01-22 10:11:11], ~N[2017-01-23 10:11:11]]
-
   """
   def unfold(%{count: _, until: _}) do
     raise ArgumentError, message: "Recur rules may not contain both count and until."
@@ -31,8 +52,7 @@ defmodule Recur do
     |> terminate(rules)
   end
 
-  def unfold(%{frequency: freq}) do
-    IO.inspect(freq)
+  def unfold(_) do
     raise ArgumentError, message: "Recur rules must specify a valid frequency parameter."
   end
 
@@ -67,17 +87,8 @@ defmodule Recur do
   end
 
   def diff(:weekly, start_date, date, week_start) do
-    # g1 = :calendar.date_to_gregorian_days(date)
-    # g2 = :calendar.date_to_gregorian_days(start_date)
-    # div(g1 - g2 + 1, 7)
-
     from = Date.add(start_date, - Dates.day_of_week(start_date, week_start) + 1)
     to = Date.add(date, - Dates.day_of_week(date, week_start) + 1)
-    # [start_date, date, from, to]
-    # |> Enum.map(&(Date.to_erl(&1)))
-    # |> Enum.map(&{&1, :calendar.date_to_gregorian_days(&1)})
-    # |> Enum.concat([{Dates.day_of_week(start_date, week_start), Dates.day_of_week(date, week_start)}])
-    # |> IO.inspect()
 
     :daily
     |> diff(from, to, week_start)
