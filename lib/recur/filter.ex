@@ -97,7 +97,7 @@ defmodule Recur.Filter do
     when is_integer(value) and (value < -53 or value > 53 or value == 0),
       do: raise ArgumentError, message: "by_day_yearly expects a number between -53..1 or 1..53; got #{value}"
 
-  def by(:by_month_day, date, value)
+  def by(:by_month_day, _, value)
     when not is_list(value) and not is_integer(value) do
       raise ArgumentError, message: "by_month_day expects a number; #{value}"
   end
@@ -106,9 +106,9 @@ defmodule Recur.Filter do
     when is_integer(value) and not is_valid_month_day(value),
     do: raise ArgumentError, message: "by_month_day expects a number between 1 and 31; got " <> Integer.to_string(value)
 
-  def by(:by_day, _, value)
+  def by(:by_day, date, value)
     when is_binary(value),
-    do: by(:by_day, _, String.to_atom(value))
+    do: by(:by_day, date, String.to_atom(value))
 
   def by(:by_day, _, value)
     when is_atom(value) and value not in [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday],
