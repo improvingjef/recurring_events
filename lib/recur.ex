@@ -41,6 +41,16 @@ defmodule Recur do
     raise ArgumentError, message: "Recur rules may not contain both count and until."
   end
 
+  def unfold(%{frequency: frequency})
+    when is_binary(frequency) do
+    unfold(String.to_atom(frequency))
+  end
+
+  def unfold(%{week_start: week_start})
+    when is_binary(week_start) do
+    unfold(String.to_atom(week_start))
+  end
+
   def unfold(%{start_date: start_date, frequency: freq} = rules)
     when is_valid_frequency(freq) do
 

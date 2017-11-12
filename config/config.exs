@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :recurring_events, key: :value
+#     config :recur, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:recurring_events, :key)
+#     Application.get_env(:recur, :key)
 #
 # Or configure a 3rd-party app:
 #
